@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORTAL · Prompt Skills</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{
+    --bg:#0a0a0c; --panel:#121217; --panel2:#16161d; --line:#26262f;
+    --ink:#e8e8ee; --mut:#9a9aa8; --dim:#6c6c7a;
+    --amber:#f5a623; --cyan:#42d6c4; --rose:#ff5c7a; --violet:#9b7dff;
+    --mono:"SFMono-Regular",ui-monospace,"Cascadia Code",Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Thai",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;
+    -webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+  /* ===== Gate ===== */
+  #gate{position:fixed;inset:0;z-index:999;background:radial-gradient(circle at 50% 30%,#15151c,#070708);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;gap:22px;padding:24px}
+  #gate .lock{font-size:13px;letter-spacing:.4em;color:var(--amber);text-transform:uppercase}
+  #gate h1{font-size:clamp(28px,6vw,46px);font-weight:800;letter-spacing:-.02em}
+  #gate p{color:var(--mut);font-size:14px;text-align:center;max-width:360px}
+  #gate .box{display:flex;gap:10px;width:100%;max-width:340px}
+  #gate input{flex:1;background:#0d0d12;border:1px solid var(--line);color:var(--ink);
+    padding:13px 15px;border-radius:12px;font-size:15px;outline:none;font-family:var(--mono)}
+  #gate input:focus{border-color:var(--amber)}
+  #gate button{background:var(--amber);color:#1a1206;border:0;padding:0 20px;border-radius:12px;
+    font-weight:700;cursor:pointer;font-size:15px}
+  #gate button:hover{filter:brightness(1.08)}
+  #gerr{color:var(--rose);font-size:13px;height:16px;font-family:var(--mono)}
+
+  #app{display:none}
+
+  /* ===== Hero ===== */
+  header.hero{padding:84px 0 54px;border-bottom:1px solid var(--line);
+    background:radial-gradient(900px 380px at 80% -10%,rgba(245,166,35,.10),transparent 60%)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.34em;color:var(--amber);text-transform:uppercase}
+  header.hero h1{font-size:clamp(36px,7vw,68px);font-weight:850;letter-spacing:-.035em;margin:14px 0 6px;line-height:1.02}
+  header.hero .sub{color:var(--mut);font-size:clamp(16px,2.4vw,21px);max-width:680px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 12px;border:1px solid var(--line);
+    border-radius:99px;color:var(--mut);background:var(--panel)}
+
+  section{padding:60px 0;border-bottom:1px solid var(--line)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;color:var(--dim);text-transform:uppercase;margin-bottom:10px}
+  h2{font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+  h2 .em{color:var(--amber)}
+  .lead{color:var(--mut);max-width:760px;margin-bottom:26px}
+
+  /* ===== Method layers ===== */
+  .layers{display:grid;gap:14px}
+  @media(min-width:760px){.layers{grid-template-columns:repeat(5,1fr)}}
+  .layer{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .layer .n{font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.1em}
+  .layer h4{font-size:15px;margin:6px 0 4px;font-weight:700}
+  .layer p{font-size:13px;color:var(--mut)}
+
+  /* ===== Tables ===== */
+  .tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px;overflow:hidden;
+    border:1px solid var(--line);border-radius:12px}
+  .tbl th,.tbl td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl th{background:var(--panel2);color:var(--mut);font-weight:600;font-size:12px;letter-spacing:.02em}
+  .tbl td:first-child{font-family:var(--mono);color:var(--ink);white-space:nowrap}
+  .tbl tr:last-child td{border-bottom:0}
+  .two{display:grid;gap:22px}
+  @media(min-width:820px){.two{grid-template-columns:1fr 1fr}}
+
+  /* ===== Skill cards ===== */
+  .skills{display:grid;gap:20px}
+  @media(min-width:820px){.skills{grid-template-columns:1fr 1fr}}
+  .card{background:linear-gradient(180deg,var(--panel),#0e0e13);border:1px solid var(--line);
+    border-radius:18px;padding:26px;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--ac)}
+  .card .cmd{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--ac)}
+  .card .role{font-size:13px;color:var(--dim);margin:2px 0 14px}
+  .card h3{font-size:16px;font-weight:700;margin:16px 0 6px}
+  .card ul{list-style:none;display:flex;flex-direction:column;gap:7px;margin-top:4px}
+  .card li{font-size:13.5px;color:var(--mut);padding-left:18px;position:relative}
+  .card li::before{content:"▸";position:absolute;left:0;color:var(--ac);font-size:11px;top:2px}
+  .card .meta{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}
+  .card .meta span{font-family:var(--mono);font-size:11px;padding:4px 9px;border-radius:7px;
+    background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--mut)}
+  .card .dl{display:inline-flex;align-items:center;gap:7px;margin-top:18px;font-family:var(--mono);
+    font-size:13px;color:var(--ac);text-decoration:none;border:1px solid var(--ac);
+    padding:9px 14px;border-radius:10px;transition:.15s}
+  .card .dl:hover{background:var(--ac);color:#0a0a0c}
+  .card.action{--ac:var(--amber)} .card.drama{--ac:var(--cyan)}
+  .card.horror{--ac:var(--rose)} .card.affiliate{--ac:var(--violet)}
+
+  /* ===== How to use ===== */
+  .steps{counter-reset:s;display:grid;gap:16px}
+  @media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;position:relative}
+  .step::before{counter-increment:s;content:counter(s);font-family:var(--mono);font-size:13px;
+    width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+    background:var(--amber);color:#1a1206;border-radius:8px;font-weight:700;margin-bottom:12px}
+  .step h4{font-size:15px;margin-bottom:5px}
+  .step p{font-size:13.5px;color:var(--mut)}
+  code.inl{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.06);
+    padding:2px 6px;border-radius:6px;color:var(--ink)}
+
+  pre{background:#0c0c11;border:1px solid var(--line);border-radius:12px;padding:16px;
+    overflow:auto;font-family:var(--mono);font-size:12.5px;color:var(--mut);margin-top:10px;line-height:1.7}
+  pre .hl{color:var(--amber)}
+
+  footer{padding:48px 0;color:var(--dim);font-size:13px;text-align:center}
+  footer .mono{font-family:var(--mono)}
+</style>
+</head>
+<body>
+
+<!-- ===== Password Gate ===== -->
+<div id="gate">
+  <div class="lock">🔒 Restricted</div>
+  <h1>FORTAL · Prompt Skills</h1>
+  <p>เอกสารวิธีเขียน AI Video/Image Prompt ระดับโปรดักชัน — ใส่รหัสเพื่อเข้าดู</p>
+  <div class="box">
+    <input id="pw" type="password" placeholder="รหัสผ่าน" autocomplete="off" autofocus>
+    <button id="go">เข้า</button>
+  </div>
+  <div id="err"></div>
+</div>
+
+<!-- ===== App ===== -->
+<div id="app">
+  <header class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Fortal Interactive · Prompt Engineering Playbook</div>
+      <h1>วิธีเขียน Prompt<br>ที่ทำให้ AI เล่าหนังเป็น</h1>
+      <p class="sub">ชุดสกิลสำหรับสร้าง prompt วิดีโอ/ภาพ ระดับโปรดักชัน — กล้อง เลนส์ แสง จังหวะ และโครงสร้าง prompt ที่กัน drift, กันหน้าแข็ง, กันซับหลุด ออกแบบสำหรับ Seedance · Higgsfield · Nano Banana (9:16)</p>
+      <div class="chips">
+        <span class="chip">/action</span><span class="chip">/drama</span>
+        <span class="chip">/horror</span><span class="chip">/affiliate</span>
+        <span class="chip">Seedance 中文</span><span class="chip">Higgsfield EN</span>
+        <span class="chip">Vertical 9:16</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shared method -->
+  <section>
+    <div class="wrap">
+      <div class="kicker">The Backbone · ใช้ร่วมกันทั้ง 4 สกิล</div>
+      <h2>Structured Prompt — <span class="em">3 ชั้น</span></h2>
+      <p class="lead">ทุกสกิลใช้โครง Seedance Structured เดียวกัน: ประกาศ ref บนหัว → ล็อกความคงที่ → ไล่ timeline ที่ย้ำฉากทุก beat → กำแพง guard ปิดท้าย ปรับ accent ต่างกันตามงาน</p>
+      <div class="layers">
+        <div class="layer"><div class="n">01 · 头部</div><h4>Declaration</h4><p>ประกาศ ref ทุกตัว <code class="inl">@[UUID] 这是ROLE（ชื่อไทย）——desc</code> ใส่ชื่อไทยในวงเล็บให้ map แม่น</p></div>
+        <div class="layer"><div class="n">02 · 永远</div><h4>Consistency Lock</h4><p>ย้ำเสื้อผ้า/สินค้า/ฉาก ด้วย 永远 กัน drift ระหว่าง beat</p></div>
+        <div class="layer"><div class="n">03 · 演技</div><h4>Acting Block</h4><p>micro-expression/眨眼/呼吸 กันหน้าแข็งหุ่นยนต์</p></div>
+        <div class="layer"><div class="n">04 · per-beat</div><h4>Beat Anchor</h4><p>ทุก beat ย้ำแสง/ฉากซ้ำ กันแสงเปลี่ยนกลางคลิป</p></div>
+        <div class="layer"><div class="n">05 · 尾部</div><h4>Guard Wall</h4><p>NO subtitles / no BGM / no overlay ย้ำ 2 ภาษา หลาย phrasing</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Camera reference -->
+  <section>
+    <div class="wrap">
+      <div class="kicker">Camera Language · ภาษากล้องร่วม</div>
+      <h2>เลนส์ · มุม · การเคลื่อนกล้อง</h2>
+      <p class="lead">เลือกเลนส์/มุมเพื่อ "อารมณ์" ไม่ใช่ภาพสวย — ทุก prompt ต้องระบุ <code class="inl">[X]mm lens</code> + แสง เสมอ</p>
+      <div class="two">
+        <div>
+          <table class="tbl">
+            <tr><th>เลนส์</th><th>ใช้ตอน / อารมณ์</th></tr>
+            <tr><td>16mm</td><td>Establishing, scale, ตัวเล็กในที่กว้าง</td></tr>
+            <tr><td>24mm</td><td>Wide + distortion, low-angle hero, isolation</td></tr>
+            <tr><td>35mm</td><td>Near-natural, establishing, character beat</td></tr>
+            <tr><td>50mm</td><td>ตาคนจริง, OTS, POV, two-shot</td></tr>
+            <tr><td>85mm</td><td>Isolate อารมณ์, reaction, cornered</td></tr>
+            <tr><td>100mm macro</td><td>Insert — มือ/อาวุธ/texture/object</td></tr>
+            <tr><td>135mm</td><td>Compression, ตา/น้ำตา, threat fused</td></tr>
+            <tr><td>Anamorphic</td><td>"หนังจริง", lens flare 2.39:1</td></tr>
+          </table>
+        </div>
+        <div>
+          <table class="tbl">
+            <tr><th>มุม / Movement</th><th>อารมณ์</th></tr>
+            <tr><td>Low angle</td><td>ยิ่งใหญ่ ทรงพลัง hero</td></tr>
+            <tr><td>High angle</td><td>อ่อนแอ vulnerable</td></tr>
+            <tr><td>Dutch tilt</td><td>สับสน บ้าคลั่ง chaos</td></tr>
+            <tr><td>OTS / POV</td><td>เผชิญหน้า / immersive</td></tr>
+            <tr><td>Dolly-in</td><td>เพิ่ม intensity / claustrophobic</td></tr>
+            <tr><td>Tracking</td><td>ตามติด เร่งรีบ</td></tr>
+            <tr><td>Slow tilt</td><td>reveal จากบน/ล่าง (horror)</td></tr>
+            <tr><td>Static lock-off</td><td>dread, surveillance, hold</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section>
+    <div class="wrap">
+      <div class="kicker">The Four Skills · รายละเอียดแต่ละสกิล</div>
+      <h2>สกิลทั้ง 4</h2>
+      <p class="lead">แต่ละสกิลมีไฟล์ <code class="inl">.md</code> เต็มของตัวเอง — เปิดอ่าน หรือโหลดไปให้ AI agent เรียนแล้วประกอบเป็น skill ได้เลย</p>
+      <div class="skills">
+
+        <div class="card action">
+          <div class="cmd">/action</div>
+          <div class="role">AI Action Movie Prompt Generator</div>
+          <p style="font-size:14px;color:var(--mut)">วิเคราะห์ฉาก action → เลือกมุม+เลนส์+แสง → gen prompt ภาพ+วิดีโอ พร้อม timeline + speed ramp</p>
+          <h3>หัวใจ</h3>
+          <ul>
+            <li><b>Timeline + Speed marker บังคับ</b> — <code class="inl">0:00-0:03 [action][SPEED]</code> ทุก beat</li>
+            <li>1 shot = 1 action = 1 มุม, เปลี่ยนเลนส์ทุก shot</li>
+            <li>Speed pattern: NORMAL→RAMP→ULTRA SLO→SNAP→FREEZE</li>
+            <li>Film presets: John Wick · Mad Max · The Raid · Matrix · Snyder · Wuxia · Anime</li>
+            <li>Intercut 切换/切回 + Sound design per beat</li>
+            <li>Seedance Structured Header (肌肉发力 acting)</li>
+          </ul>
+          <div class="meta"><span>timeline</span><span>speed-ramp</span><span>film-presets</span><span>sequence</span></div>
+          <a class="dl" href="skills/action.md">⬇ action.md</a>
+        </div>
+
+        <div class="card drama">
+          <div class="cmd">/drama</div>
+          <div class="role">Vertical Drama Prompt Generator</div>
+          <p style="font-size:14px;color:var(--mut)">อ่านบท → แบ่ง story/shot/lens → gen prompt ภาพ+วิดีโอ+เสียง ทั้ง pipeline + export Word</p>
+          <h3>หัวใจ</h3>
+          <ul>
+            <li><b>Seedance Structured ตัวเต็ม</b> (บ้านของเทคนิค)</li>
+            <li>Story ≤ 30 วิ → shot → lens ตามอารมณ์</li>
+            <li>Default idle — บทพูด gen idle, lipsync แยก</li>
+            <li>ตั้งชื่อตัวละครไทย + object consistency 同一</li>
+            <li>Voice Design prompt (ElevenLabs)</li>
+            <li>Export Production Doc (.docx)</li>
+          </ul>
+          <div class="meta"><span>script→shots</span><span>lipsync-idle</span><span>voice-design</span><span>.docx</span></div>
+          <a class="dl" href="skills/drama.md">⬇ drama.md</a>
+        </div>
+
+        <div class="card horror">
+          <div class="cmd">/horror</div>
+          <div class="role">Thai-Psychological Horror Generator</div>
+          <p style="font-size:14px;color:var(--mut)">บทผี → เลือก Director Tradition → Context Engine → Beat Archetype → prompt + sound + Production Doc</p>
+          <h3>หัวใจ</h3>
+          <ul>
+            <li><b>Director grammar</b>: Banjong · Sopon · Shimizu · Nakata</li>
+            <li>Master layer: Murch · Hitchcock · Block · Brown · Tarkovsky</li>
+            <li>Context Engine 10 ตัวแปร → 8 Beat Archetypes</li>
+            <li>ผีไทย archetypes + Body-Grammar Tells (ไม่มีเงา/ลอย)</li>
+            <li>Buddhist karma framework + object-conduit</li>
+            <li>演技 invert (ผี=ไม่กระพริบตา) · Sound mid-freq</li>
+          </ul>
+          <div class="meta"><span>director-grammar</span><span>context-engine</span><span>archetypes</span><span>karma</span></div>
+          <a class="dl" href="skills/horror.md">⬇ horror.md</a>
+        </div>
+
+        <div class="card affiliate">
+          <div class="cmd">/affiliate</div>
+          <div class="role">TikTok ปักตะกร้า / UGC Product Video</div>
+          <p style="font-size:14px;color:var(--mut)">รีวิวสินค้าแบบ UGC — model ไม่พูด เน้นถ่าย แนบ ref สินค้า + Product Lock + gen บท VO (Google TTS)</p>
+          <h3>หัวใจ</h3>
+          <ul>
+            <li><b>Product Consistency Lock (永远)</b> — สินค้าห้ามเพี้ยน</li>
+            <li>ตัวละครไม่พูด — VO ใส่ทีหลัง (silent visual)</li>
+            <li>Hook → Demo → CTA ปักตะกร้า (ชี้ ไม่ render ไอคอน)</li>
+            <li>Modes: Product-Forward · Loopable · Intercut</li>
+            <li>VO = Gemini TTS Composer (Scene/Context/[emotion] tag)</li>
+            <li>Filter cheatsheet สินค้า sensitive</li>
+          </ul>
+          <div class="meta"><span>product-lock</span><span>no-dialogue</span><span>hook-demo-cta</span><span>vo-composer</span></div>
+          <a class="dl" href="skills/affiliate.md">⬇ affiliate.md</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- How to use -->
+  <section>
+    <div class="wrap">
+      <div class="kicker">For Other Teams · เอาไปใช้ต่อ</div>
+      <h2>ให้ AI Agent ของคุณ <span class="em">เรียนจากเรา</span></h2>
+      <p class="lead">ไฟล์ <code class="inl">.md</code> แต่ละอันเป็นสกิลเต็มในตัว — เป็นทั้งคู่มือสอนวิธีคิด และพร้อมติดตั้งเป็น Claude Code skill</p>
+      <div class="steps">
+        <div class="step"><h4>1 · โหลด .md</h4><p>เปิด/ดาวน์โหลดไฟล์สกิลที่ต้องการ (action / drama / horror / affiliate)</p></div>
+        <div class="step"><h4>2 · ป้อนให้ AI</h4><p>วางให้ AI agent ของคุณ บอกว่า "เรียนวิธีนี้แล้วทำเป็น skill ให้หน่อย" — มันจะเข้าใจทั้งกล้อง เลนส์ และโครง prompt</p></div>
+        <div class="step"><h4>3 · ติดตั้ง</h4><p>วางไฟล์ที่ <code class="inl">.claude/skills/&lt;name&gt;/SKILL.md</code> แล้วเรียกด้วย <code class="inl">/&lt;name&gt;</code></p></div>
+      </div>
+      <pre><span class="hl"># โครง frontmatter ของ skill (บรรทัดบนสุดของไฟล์)</span>
+---
+name: action
+description: "เมื่อไหร่ให้เรียกสกิลนี้..."
+user_invocable: true
+---
+<span class="hl"># ติดตั้งใน Claude Code</span>
+.claude/skills/action/SKILL.md   →   เรียกด้วย /action</pre>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="mono">FORTAL INTERACTIVE</div>
+      <div>Prompt Engineering Playbook · Seedance · Higgsfield · Nano Banana</div>
+      <div style="margin-top:8px;color:#44444f">เอกสารภายใน — กรุณาอย่าเผยแพร่รหัสผ่าน</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+const PASS_HASH = "68426e66c284d1ab23807612cf11c823c80edb282ac5a2f48a598554fc1ca650";
+const gate = document.getElementById('gate');
+const app  = document.getElementById('app');
+const pw   = document.getElementById('pw');
+const err  = document.getElementById('err');
+
+async function sha256(s){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function unlock(){ gate.style.display='none'; app.style.display='block'; }
+
+async function tryPass(){
+  const h = await sha256(pw.value.trim());
+  if(h === PASS_HASH){
+    sessionStorage.setItem('fortal_ok','1');
+    unlock();
+  }else{
+    err.textContent = 'รหัสไม่ถูกต้อง';
+    pw.value=''; pw.focus();
+  }
+}
+document.getElementById('go').addEventListener('click', tryPass);
+pw.addEventListener('keydown', e=>{ if(e.key==='Enter') tryPass(); });
+if(sessionStorage.getItem('fortal_ok')==='1') unlock();
+</script>
+</body>
+</html>
