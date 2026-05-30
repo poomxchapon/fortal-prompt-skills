@@ -760,6 +760,8 @@ Section Y: Editing Notes
 
 ---
 
+> 📷 **ภาษากล้องเต็ม** (shot size · angle · movement · lens · composition · 9:16 · when-NOT-to-use): `.claude/skills/_shared/master-camera-reference.md` — ตารางด้านล่างคือ psychology-first lens ของ horror
+
 ## Lens Guide — Psychology-First (Brown-aligned)
 
 ห้ามเลือกเลนส์เพื่อ "ภาพสวย" — เลือกเพื่อ **emotional intent**

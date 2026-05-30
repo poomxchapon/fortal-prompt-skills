@@ -219,6 +219,8 @@ cinematic professional camera language
 
 ## Camera Angle Selection (เลือกมุมกล้องตามอารมณ์)
 
+> 📷 **ภาษากล้องเต็ม** (shot size · angle · height · movement · lens · composition · 9:16 · when-NOT-to-use): `.claude/skills/_shared/master-camera-reference.md` — ตารางด้านล่างคือชุดที่ /action ใช้บ่อย
+
 | มุมกล้อง | อารมณ์ | ใช้ตอน | Prompt Keyword |
 |----------|--------|--------|----------------|
 | **Low Angle** | ยิ่งใหญ่ ทรงพลัง | Hero moment, ตัวร้ายปรากฏ | `low angle shot` |

@@ -193,6 +193,8 @@ cinematic UGC handheld, vertical 9:16，竖屏9:16
 
 ## Shot Library — UGC Commerce (เลือกตาม beat)
 
+> 📷 **ภาษากล้องเต็ม** (shot size · angle · movement · lens · composition · 9:16): `.claude/skills/_shared/master-camera-reference.md` — ตารางด้านล่างคือชุดที่ affiliate ใช้บ่อย
+
 | Shot | เลนส์ | ใช้ใน beat | จีน keyword |
 |------|------|-----------|-------------|
 | **Talking-head หยิบสินค้า** | 35mm | Hook | `中景手持，拿起产品对镜头` |

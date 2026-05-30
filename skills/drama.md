@@ -49,6 +49,8 @@
 4. **แบ่ง Shot ใน Story** — ตามจังหวะอารมณ์ที่เปลี่ยน
 5. **เลือก Lens** — ตามอารมณ์แต่ละ Shot
 
+> 📷 **ภาษากล้องเต็ม** (shot size · angle · movement · lens · composition · 9:16): `.claude/skills/_shared/master-camera-reference.md`
+
 ### Lens Guide (เลนส์ = ภาษาอารมณ์)
 
 | Lens | ฟีล | ใช้ตอน |
