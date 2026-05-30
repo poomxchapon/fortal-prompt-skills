@@ -1,7 +1,0 @@
-﻿action.md	45839 bytes
-affiliate.md	26599 bytes
-drama.md	19198 bytes
-horror.md	78602 bytes
-master-camera-reference.md	12795 bytes
-TOTAL_FILES=5
-DUPLICATE_NAMES=0
